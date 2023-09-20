@@ -245,7 +245,7 @@ reusable React component.
 3. Change div -> button
 4. Give it a couple of classes (2 primary buttons)
 
-==========================================================
+- This is a commit test!
 
 ## Chapter 3 - Styling Components
 
