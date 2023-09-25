@@ -3,7 +3,15 @@
  *****************************************************************************/
 import { useState } from "react";
 import Alert from "./components/Alert";
-import Button from "./components/Button";
+import Button from "./components/Button/Button";
+
+// index.ts helps reduce the wording instead of doing ./com/LisGro/LisGro;
+// import ListGroup from "./components/ListGroup";
+
+// Icons library from "https://react-icons.github.io/react-icons"
+// import { BsFillCalendarFill } from "react-icons/bs";
+
+import "./App.css";
 
 function App() {
   // React component with the opening and closing tag.

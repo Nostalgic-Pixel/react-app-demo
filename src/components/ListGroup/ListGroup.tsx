@@ -1,6 +1,17 @@
 // import { Fragment } from "react";
 // import { MouseEvent } from "react";
 import { useState } from "react";
+import styles from "./ListGroup.module.css";
+import styled from "styled-components";
+
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const ListItem = styled.li`
+  padding: 5px 0;
+`;
 
 // { items: [], heading: string }
 // Using type annotation to specify the type properties.
@@ -13,7 +24,7 @@ interface Props {
 
 function ListGroup({ items, heading, onSelectItem }: Props) {
   // Create a constant array of strings.
-  //let items = ["New York", "San Fransisco", "Tokyo", "Paris"];
+  // let items = ["New York", "San Fransisco", "Tokyo", "Paris"];
 
   // Variable for highlighting singular idexes (-1 = no item selected).
   // let selectedIndex = -1;
@@ -35,14 +46,14 @@ function ListGroup({ items, heading, onSelectItem }: Props) {
     <>
       <h1>{heading}</h1>
       {items.length === 0 && <p>No item found</p>}
-      <ul className="list-group">
+      <List className={[styles.listGroup, styles.container].join(" ")}>
         {items.map((item, index) => (
-          <li
-            className={
-              selectedIndex === index
-                ? "list-group-item active"
-                : "list-group-item"
-            }
+          <ListItem
+            // className={
+            //   selectedIndex === index
+            //     ? "list-group-item active"
+            //     : "list-group-item"
+            // }
             key={item}
             onClick={() => {
               setSelectedIndex(index);
@@ -50,9 +61,9 @@ function ListGroup({ items, heading, onSelectItem }: Props) {
             }}
           >
             {item}
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 }

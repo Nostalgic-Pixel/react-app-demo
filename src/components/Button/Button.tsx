@@ -1,9 +1,10 @@
 /******************************************************************************
  * Button File:
  * This file was created for Exercise 13 on how to create a "button component."
- *
  *****************************************************************************/
+// LIBRARIES:
 // import React from "react";
+import styles from "./Button.module.css";
 
 // Making the text of the button label dynamic.
 interface Props {
@@ -27,11 +28,14 @@ interface Props {
 
 // Create the button function and define some classes by also
 // including the children parameter and destructure it.
-const Button = ({ children, onClick, color }: Props) => {
+const Button = ({ children, onClick, color = "primary" }: Props) => {
   return (
     // onClick is a function that is passed from the outside so that the parent of the
     // component is going to pass that function
-    <button className={"btn btn-" + color} onClick={onClick}>
+    <button
+      className={[styles.btn, styles["btn-" + color]].join(" ")}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

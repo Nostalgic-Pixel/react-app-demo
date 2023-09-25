@@ -180,7 +180,14 @@ items.map((item) => <li>{item}</li>);
 We want to show a message if there is no items in the list. Instead of
 Doing the IF condition, we need to do the {} method in a HTML element
 style.
-ex. {items.length === 0 ? <p>No item found</p> : null}
+
+ex.
+
+```js
+{
+  items.length === 0 ? <p>No item found</p> : null;
+}
+```
 
 we want to compare the length of the list, see if it is zero, if so,
 show "no item found", then return null (meaning nothing will be
@@ -249,6 +256,92 @@ reusable React component.
 
 ## Chapter 3 - Styling Components
 
+**TERMS**
+
+- CSS-in-JS
+- CSS modules
+- Implementation details
+- Interface
+- Inline styles
+- Modular
+- Separation of concerns
+- Vanilla CSS
+
+**SUMMARY**
+
+- We have several options for styling React components, including vanilla CSS, CSS modules, CSS-in-JS, and inline styles.
+
+- With vanilla CSS, we write our component styles in a separate CSS file and import it into the component file. However, we may encounter conflicts if the same CSS classes are defined in multiple files.
+
+- CSS modules resolve this issue by generating unique class names during the build process.
+
+- With CSS-in-JS, we define all the styles for a component alongside its code. Like CSS modules, this provides scoping for CSS classes and eliminates conflicts. It also makes it easier for us to change or delete a component without affecting other components.
+
+- The separation of concerns principle suggests that we divide a program into distinct sections or modules where each section handles a specific functionality. It helps us build modular and maintainable applications.
+
+- With this principle, the complexity and implementation details of a module are hidden behind a well-defined interface.
+
+- Separation of concerns is not just about organizing code into files, but rather dividing areas of functionality. Therefore, CSS-in-JS does not violate the separation of concerns principle as all the complexity for a component remains hidden behind its interface.
+
+- Although inline styles are easy to apply, they can make our code difficult to maintain over time and should only be used as a last resort.
+
+- We can add icons to our applications using the react-icons library.
+
+- There are several UI libraries available that can assist us in quickly building beautiful and modern applications. Some popular options include Bootstrap, Material UI, TailwindCSS, DaisyUI, ChakraUI, and more.
+
+**VANILLA CSS**
+
+```js
+import "./ListGroup.css";
+
+function ListGroup() {
+  return <ul className="list-group"></ul>;
+}
+```
+
+**CSS MODULES**
+
+```js
+import styles from "./ListGroup.module.css";
+
+function ListGroup() {
+  return <ul className={styles.listGroup}></ul>;
+}
+```
+
+**CSS-IN-JS**
+
+```js
+import styled from "styled-components";
+
+const List = styled.ul`
+  list-style: none;
+`;
+
+function ListGroup() {
+  return <List></List>;
+}
+```
+
+**NOTES**
+
+CSS-in-JS Benefits
+
+- Scoped styles
+- All the CSS & JS/TS code in one place
+- Easier to delete a component
+- Easier to style based on props/state
+
+Popular tyles of Libraries
+
+- Styled components
+- Emotion
+- Polished
+
+**Separation of concerns**: Divide a program into distinct sections where each
+section handles a specific functionallity, rather than having everything
+in one place.
+
 ## Chapter 4 - Managing Component State
 
 ## Chapter 5 - Building Forms
@@ -256,3 +349,141 @@ reusable React component.
 ## Chapter 6 - Connecting to the Backend
 
 ## Chapter 7 - Project: Video Game Discovery App
+
+## Chapter EX - Notes, ideas, you name it
+
+**Regular Comment**
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      {/* message prop requires a string */}
+      <Hello message="Hello, World!" />
+    </div>
+  );
+}
+```
+
+**Multi-line Comment**
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      {/* 
+         Warning!
+         message prop requires a string 
+     */}
+      <Hello message="Hello, World!" />
+    </div>
+  );
+}
+```
+
+or
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      {
+        // message prop requires a string
+      }
+      <Hello message="Hello, World!" />
+    </div>
+  );
+}
+```
+
+**Comment arouind JSX**
+
+```js
+function MyComponent() {
+  return (
+    // message prop requires a string
+    <div>
+      <Hello message="Hello, World!" />
+    </div>
+  );
+}
+```
+
+or
+
+```js
+function MyComponent() {
+  return (
+    /*
+       Warning! 
+       message prop requires a string
+    */
+    <div>
+      <Hello message="Hello, World!" />
+    </div>
+  );
+}
+```
+
+or
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua
+      </div>
+      <Hello message="Hello, World!" />
+    </div>
+    // message prop requires a string
+  );
+}
+```
+
+**Comment inside JSX**
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      <Hello
+        message="Hello, World!" // message prop requires a string
+      />
+    </div>
+  );
+}
+```
+
+or
+
+```js
+function MyComponent() {
+  return (
+    <div>
+      <Hello // Hello accepts message prop
+        message="Hello, World!"
+      />
+    </div>
+  );
+}
+```
+
+- JSX comments syntax (the ugly)
+- JavaScript comments around JSX (the bad)
+- JavaScript comments inside a JSX tag (the good)
+
+```js
+function MyComponent() {
+  return (
+    // Comment around JSX
+    <div>
+      {/* Comment inside JSX */}
+      <Hello // comment inside JSX tag
+        message="Hello, World!" // comment inside JSX tag
+      />
+    </div>
+  );
+}
+```

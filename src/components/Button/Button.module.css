@@ -1,0 +1,14 @@
+
+
+/* Class for all buttons */
+.btn {
+    padding: 8px 12px;
+    border-radius: 3px;
+    border: 0;
+}
+
+/* Class for colors (Primary button style) */
+.btn-primary {
+    background-color: #0d6efd;
+    color: white;
+}
