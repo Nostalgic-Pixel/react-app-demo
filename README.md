@@ -344,7 +344,376 @@ in one place.
 
 ## Chapter 4 - Managing Component State
 
+**TERMS**
+
+- Asynchronous
+- Lifting state
+- Pure component
+- Strict mode
+
+**SUMMARY**
+
+- The state hook allows us to add state to function components.
+- The state hook allows us to add state to function components.
+- State variables, unlike local variables in a function, stay in
+  memory as long as the component is visible on the screen. This is
+  because state is tied to the component instance, and React will
+  destroy the component and its state when it is removed from the
+  screen.
+- React updates state in an asynchronous manner, so updates are
+  not applied immediately. Instead, they’re batched and applied at
+  once after all event handlers have finished execution. Once the
+  state is updated, React re-renders our component.
+- Group related state variables into an object to keep them organized.
+- Avoid deeply nested state objects as they can be hard to update and
+  maintain.
+- To keep state as minimal as possible, avoid redundant state variables
+  that can be computed from existing variables.
+- A pure function is one that always returns the same result given the
+  same input. Pure functions should not modify objects outside of the function.
+- React expects our function components to be pure. A pure component should
+  always return the same JSX given the same input.
+- To keep our components pure, we should avoid making changes during the
+  render phase.
+- Strict mode helps us catch potential problems such as impure components.
+  Starting from React 18, it is enabled by default. It renders our components
+  twice in development mode to detect any potential side effects.
+- When updating objects or arrays, we should treat them as immutable objects.
+  Instead of mutating them, we should create new objects or arrays to update the state.
+- Immer is a library that can help us update objects and arrays in a more
+  concise and mutable way.
+- To share state between components, we should lift the state up to the closest
+  parent component and pass it down as props to child components.
+- The component that holds some state should be the one that updates it.
+  If a child component needs to update some state, it should notify the parent
+  component using a callback function passed down as a prop.
+
+**UPDATING OBJECTS**
+
+```js
+const [drink, setDrink] = useState({
+  title: "Americano:",
+  price: 5,
+});
+```
+
+**UPDATING NESTED OBJECTS**
+
+```js
+const [customer, setCustomer] = useState({
+  name: "John",
+  address: {
+    city: "San Francisco",
+    zipCode: 94111,
+  },
+});
+
+setCustomer({
+  ...customer,
+  address: { ...customer.address, zipCode: 94112 },
+});
+```
+
+**UPDATING ARRAY**
+
+```js
+const [tags, setTags] = useState(['a', 'b']);
+
+// Adding
+setTags([...tags, 'c']);
+
+// Removing
+setTags(tags.filter(tag => tag === 'a' ? 'A' : tag));
+
+// Updating
+setTags(tags.map(tag => === 'a' ? 'A' : tag));
+```
+
+**UPDATING ARRAY OF OBJECTS**
+
+```js
+const [bugs, setBugs] = useState([
+  { id: 1, title: "Bug 1", fixed: false },
+  { id: 2, title: "Bug 2", fixed: false },
+]);
+
+setBugs(bugs.map((bugs) => (bug.id === 1 ? { ...bug, fixed: true } : bug)));
+```
+
+**UPDATING WITH IMMER**
+
+```js
+import produce from "immer";
+
+setBugs(
+  produce((draft) => {
+    const bug = draft.find((bug) => bug.id === 1);
+    if (bug) bug.fixed = true;
+  })
+);
+```
+
+**EXERCISE - Updating State**
+
+Number 1
+
+We want to update the name of the player's name and make the code
+future proof so that if anything were to change in the player, it
+would still be able to change things such as the name and such
+without having to go through all of the instances and having to
+manually change them. The code below gives the idea on how to do it.
+
+```js
+function App() {
+  const [game, setGame] = useState({
+    id: 1,
+    player: {
+      name: "John",
+    },
+  });
+
+  const handleClick = () => {
+    setGame({ ...game, player: { ...game.player, name: "Bob" } });
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Number 2
+
+We want to add a new topping to the already existing array for the pizza.
+One simple way would be to call all of the existing toppings from the
+pizza array and then create a new array that has the existing toppings and
+then change it by adding another topping to the array. The code below gives an
+idea on how to do that.
+
+```js
+function App() {
+  const [pizza, setPizza] = useState({
+    name: "Spicy Pepperoni",
+    toppings: ["Mushroom"],
+  });
+
+  const handleClick = () => {
+    setPizza({ ...pizza, toppings: [...pizza.toppings, "Cheese"] });
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Number 3
+
+We want to change the quantity of a product. In order to do that, we would need to
+set the cart, use the data of the entire cart object, find the item that has an id of
+"1", then change it to a new number or by simply adding it by a number. If the IF search could not find it, then it will just return the original value of the product.
+The code below gives an idea on how that might work.
+
+```js
+function App() {
+  const [cart, setCart] = useState({
+    discount: 1,
+    items: [
+      { id: 1, title: "Product 1", quantity: 1 },
+      { id: 2, title: "Product 2", quantity: 1 },
+    ],
+  });
+
+  const handleClick = () => {
+    setCart({
+      ...cart,
+      items: cart.items.map((item) =>
+        item.id === 1 ? { ...item, quantity: 2 } : item
+      ),
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+**EXERCISE - Building an ExpandableText Component**
+
+**NOTES**
+
+Pure Function: Given the same input, always returns the same results.
+
 ## Chapter 5 - Building Forms
+
+**TERMS**
+
+- React Hook Form
+- Ref hook
+- Schema-based validation libraries
+- Zod
+
+**SUMMARY**
+
+- To handle form submissions, we set the onSubmit attribute of the form element.
+- We can use the ref hook to access elements in the DOM. This technique is often used to read the value of input fields upon submitting a form.
+- We can also use the state hook to create state variables and update them as the user types into input fields. With this technique, every time the user types a character into an input field, the component containing the form gets re-rendered. While in theory this can cause a performance penalty, in practice this is often negligible.
+- React Hook Form is a popular library that helps us build forms quickly with less code. With React Hook Form, we no longer have to worry about using the ref or state hooks to manage the form state.
+- React Hook Form supports the standard HTML attributes for data validation such as required, minLength, etc.
+- We can validate our forms using schema-based validation libraries such as joi, yup, zod, etc. With these libraries, we can define all our validation rules in a single place called a schema.
+
+**HANDLING FORM SUBMISSION**
+
+```js
+const App = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    console.log("Submitted");
+  };
+
+  return <form onSubmit={handleSubmit}></form>;
+};
+```
+
+**ACCESSING INPUT FIELDS USING THE REF HOOK**
+
+```js
+const App = () => {
+  const nameRef = useRef < HTMLInputElement > null;
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (nameRef.current) console.log(nameRef.current.value);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input ref={nameRef} type="text" />
+    </form>
+  );
+};
+```
+
+**MANAGING FORM STATE USING THE STATE HOOK**
+
+```js
+const App = () => {
+  const [name, setName] = useState("");
+
+  return (
+    <form>
+      <input
+        type="text"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+    </form>
+  );
+};
+```
+
+**MANAGING FORM STATE USING REACT HOOK FORM**
+
+```js
+import { FieldValues, useForm } from "react-hook-form";
+
+const App = () => {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data: FieldValues) => {
+    console.log("Submitting the form", data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...regester("name")} type="text" />
+    </form>
+  );
+};
+```
+
+**VALIDATION USING HTML5 ATTRIBUTES**
+
+```js
+const App = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit = (data: FieldValues) => {
+    const.log("Submitting the form", data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+    {errors.name?.type === "required" && <p>Name is required</p>}
+  );
+};
+```
+
+**DISABLING THE SUBMIT BUTTON**
+
+```js
+const App = () => {
+  const {
+    formState: { isValid },
+  } = useForm<FormData>();
+
+  return (
+    <form>
+      <button disable={!isValid}>Submit</button>
+    </form>
+  );
+};
+```
+
+**SCHEMA-BASED VALIDATION WITH ZOD**
+
+```js
+import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  name: z.string().min(3),
+});
+
+type FormData = z.infer<typeof schema>;
+
+const App = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm < FormData > { resolver: zodResolver(schema) };
+
+  const onSubmit = (data: FieldValues) => {
+    console.log("Submitting the form", data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("name")} type="text" />
+    </form>
+  );
+};
+```
 
 ## Chapter 6 - Connecting to the Backend
 
@@ -396,7 +765,7 @@ function MyComponent() {
 }
 ```
 
-**Comment arouind JSX**
+**Comment around JSX**
 
 ```js
 function MyComponent() {
